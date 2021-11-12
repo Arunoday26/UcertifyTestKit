@@ -1,29 +1,35 @@
 <script>
   import { fly } from 'svelte/transition';
+  import { apiData } from './store/quesStore';
 
   export let show = false;
 </script>
 
 {#if show}
-  <nav transition:fly={{ x: -250, opacity: 1 }}>
+  <nav transition:fly={{ x: -150, opacity: 1 }}>
     <ol>
-      <li>
-        <button>Question </button>
-      </li>
+      {#each $apiData as dataItem, i (dataItem)}
+        <li>
+          <button id="scroll"
+            >{JSON.parse(dataItem.content_text).question}</button
+          >
+        </li>
+      {/each}
     </ol>
   </nav>
 {/if}
-
 
 <style>
   nav {
     position: fixed;
     top: 13.2%;
     left: 0;
-    height: 100%;
-    padding: 64px;
+    height: 75%;
+    width: 15%;
+    /* padding: 35px; */
     border-right: 2px solid #aaa;
     background: #fff;
-    overflow-y: auto;
+    white-space: nowrap;
+    overflow: scroll;
   }
 </style>

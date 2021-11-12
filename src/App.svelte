@@ -1,19 +1,20 @@
 <script>
   import Header from './UI/Header.svelte';
   import Footer from './UI/Footer.svelte';
-  import { onMount } from 'svelte';
+//   import { onMount } from 'svelte';
   import { apiData } from './UI/store/quesStore.js';
 
-  onMount(async () => {
-    fetch('ques.json')
-      .then((response) => response.json())
-      .then((data) => {
-        apiData.set(data);
-      })
-      .catch((error) => {
-        return [];
-      });
-  });
+//   onMount(async () => {
+//     fetch('ques.json')
+//       .then((response) => response.json())
+//       .then((data) => {
+//         apiData.set(data);
+//         console.log(apiData);
+//       })
+//       .catch((error) => {
+//         return [];
+//       });
+//   });
   let startBtn = true;
   let startQuiz = false;
   let currentQues = 0;
@@ -23,8 +24,16 @@
     startBtn = false;
   }
 
-  function quesChangeHandler(event) {
-    currentQues = event;
+  // function quesChangeHandler(event) {
+  //   currentQues = event;
+  // }
+
+  function nextQuest() {
+    currentQues += 1;
+  }
+
+  function prevQuest() {
+    currentQues -= 1;
   }
 </script>
 
@@ -48,12 +57,15 @@
             class="selectAns"
             bind:value={ans}
           />
-          {JSON.parse(dataItem.content_text).answer}
+          {ans.answer}
         </div>
       {/each}
     {/if}
   {/each}
-  <Footer />
+  <Footer
+    on:nextques={() => nextQuest(currentQues)}
+    on:prevques={() => prevQuest(currentQues)}
+  />
 {/if}
 
 <style>
