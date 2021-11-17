@@ -3,11 +3,14 @@
   import { createEventDispatcher } from 'svelte';
   import { onMount } from 'svelte';
   import { apiData } from './store/quesStore';
+  // import ReviewPage from './ReviewPage.svelte';
   const dispatch = createEventDispatcher();
   let sideBarShow = false;
-  let index = 1;
+  export let index = 1;
+  let nextDisabled = false;
+  let prevDisabled = true;
 
-  let min = 1;
+  let min = 20;
   let sec = 60;
   let timer;
 
@@ -39,11 +42,16 @@
       dispatch_event = 'endques';
     }
     dispatch(dispatch_event);
-    // if (index > $apiData.length) {
-    //   alert('no any next');
-    // } else if (index < 1) {
-    //   alert('no any previous');
-    // }
+    if (index >= $apiData.length) {
+      nextDisabled = true;
+    } else {
+      nextDisabled = false;
+    }
+    if (index < 2) {
+      prevDisabled = true;
+    } else {
+      prevDisabled = false;
+    }
   }
 </script>
 
@@ -62,7 +70,8 @@
       type="button"
       class="toggleBtn"
       id="nextBtn"
-      on:click={() => navigateItem('prev')}>Previous</button
+      on:click={() => navigateItem('prev')}
+      disabled={prevDisabled}>Previous</button
     >
 
     <span><p><b>{index} of {$apiData.length}</b></p></span>
@@ -70,9 +79,12 @@
       type="button"
       class="toggleBtn"
       id="prevBtn"
-      on:click={() => navigateItem('next')}>Next</button
+      on:click={() => navigateItem('next')}
+      disabled={nextDisabled}>Next</button
     >
-    <button type="submit" class="toggleBtn">End Test</button>
+    <button type="submit" class="toggleBtn" on:click={() => navigateItem('end')}
+      >End Test</button
+    >
   </div>
 </footer>
 
@@ -100,7 +112,9 @@
     border-radius: 5px;
     width: 18%;
   }
-
+  .toggleBtn:hover {
+    background-color: #b0bbbb;
+  }
   #timer {
     width: 10px;
     margin-right: 40px;

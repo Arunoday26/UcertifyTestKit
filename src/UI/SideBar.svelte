@@ -1,7 +1,13 @@
 <script>
   import { fly } from 'svelte/transition';
   import { apiData } from './store/quesStore';
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
 
+  function jumpQuest(){
+    dispatch('goTo')
+    // console.log("Clicked")
+  }
   export let show = false;
 </script>
 
@@ -10,7 +16,7 @@
     <ol>
       {#each $apiData as dataItem, i (dataItem)}
         <li>
-          <button id="scroll"
+          <button id="scroll" on:click="{() => jumpQuest()}"
             >{JSON.parse(dataItem.content_text).question}</button
           >
         </li>
