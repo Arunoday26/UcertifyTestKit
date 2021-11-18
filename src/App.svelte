@@ -2,38 +2,33 @@
   import { afterUpdate } from 'svelte';
   import Header from './UI/Header.svelte';
   import Footer from './UI/Footer.svelte';
-  import { apiData } from './UI/store/quesStore.js';
+  import { apiData, currentQues } from './UI/store/quesStore.js';
   import { userAnsObj } from './UI/store/ansStore';
-  // import SideBar from './UI/SideBar.svelte';
-  import ReviewPage from './UI/ReviewPage.svelte';
+  import ResultPage from './UI/ResultPage.svelte'
 
   let startBtn = true;
   let startQuiz = false;
-  let currentQues = 0;
-
+  let quizPage = true;
   function quizDisplay() {
     startQuiz = true;
     startBtn = false;
   }
-
-  // function quesChangeHandler(event) {
-  //   currentQues = event;
-  // }
+  
 
   async function nextQuest() {
-    currentQues += 1;
-    initialise(currentQues);
+    currentQues.update((ques) => ques + 1);
+    initialise($currentQues);
   }
 
   async function prevQuest() {
-    currentQues -= 1;
-    initialise(currentQues);
+    currentQues.update((ques) => ques - 1);
+    initialise($currentQues);
   }
 
-  function initialise(currentQues) {
-    if (!(currentQues in userAnsObj)) {
+  function initialise($currentQues) {
+    if (!($currentQues in userAnsObj)) {
       let user_ans = { chosenAns: '', isCorrect: '' };
-      userAnsObj[currentQues] = user_ans;
+      userAnsObj[$currentQues] = user_ans;
     }
   }
   afterUpdate(() => {
@@ -41,6 +36,7 @@
       .querySelector('#question_section')
       ?.addEventListener('click', function (event) {
         let selected_ans = event.target.value;
+        console.log(selected_ans);
         let is_correct = event.target.getAttribute('is_correct');
         if (selected_ans != undefined) {
           updateUserAns(selected_ans, is_correct);
@@ -48,23 +44,34 @@
       });
   });
 
+  
+
   function updateUserAns(selected_ans, is_correct) {
     let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
-    userAnsObj[currentQues] = user_ans;
+    userAnsObj[$currentQues] = user_ans;
     console.log(userAnsObj);
-  
   }
+   
 
-  let review = false;
+  // function onOptionClicked(event){
+  //   let selected_ans = event.target.value;
+  //   let is_correct = event.target.getAttribute('is_correct');
+  //   console.log(selected_ans , is_correct);
+  //   let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
+  //   userAnsObj[currentQues] = user_ans;
+
+  // }
+
+  let result = false;
   function endBtn() {
     let okClk = confirm('Are you want to End the test!');
     if (okClk == true) {
-      review = true;
-      startQuiz = false;
+      result = true;
+      quizPage = false;
     }
   }
 </script>
-
+{#if quizPage}
 <Header />
 
 {#if startBtn}
@@ -73,20 +80,21 @@
 
 {#if startQuiz}
   {#each $apiData as dataItem, i (dataItem)}
-    {#if currentQues == i}
+    {#if $currentQues == i}
       <p>{JSON.parse(dataItem.content_text).question}</p>
-      <div id="question_section">
+      <div id="question_section" >
         {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
           <!-- svelte-ignore missing-declaration -->
 
-          <label for="ans{index}">
+          <label for="ans{index}" id="option{index}" >
             <input
               type="radio"
               name="ans"
               id="ans{index}"
               class="selectAns"
               is_correct={ans.is_correct}
-              value={index}
+              value={ans.answer}
+              checked={userAnsObj[$currentQues]?.chosenAns === ans.answer}
             />
             {ans.answer}
           </label>
@@ -100,8 +108,9 @@
     on:endques={() => endBtn()}
   />
 {/if}
-{#if review}
-  <ReviewPage />
+{/if}
+{#if result}
+  <ResultPage />
 {/if}
 
 <style>

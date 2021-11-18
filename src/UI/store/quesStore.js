@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
-// import { onMount } from 'svelte';
-
+export const currentQues = writable(0);
+export const index = writable(1);
 export const apiData = writable([fetchUserData()]);
 
 async function fetchUserData(data, set) {
