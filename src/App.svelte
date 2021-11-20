@@ -9,6 +9,7 @@
   let startBtn = true;
   let startQuiz = false;
   let quizPage = true;
+  let resultData = [];
   function quizDisplay() {
     startQuiz = true;
     startBtn = false;
@@ -31,36 +32,46 @@
       userAnsObj[$currentQues] = user_ans;
     }
   }
-  afterUpdate(() => {
-    document
-      .querySelector('#question_section')
-      ?.addEventListener('click', function (event) {
-        let selected_ans = event.target.value;
-        console.log(selected_ans);
-        let is_correct = event.target.getAttribute('is_correct');
-        if (selected_ans != undefined) {
-          updateUserAns(selected_ans, is_correct);
-        }
-      });
-  });
+  // afterUpdate(() => {
+  //   document
+  //     .querySelector('#question_section')
+  //     ?.addEventListener('click', function (event) {
+  //       let selected_ans = event.target.value;
+  //       console.log(selected_ans);
+  //       let is_correct = event.target.getAttribute('is_correct');
+  //       if (selected_ans != undefined) {
+  //         updateUserAns(selected_ans, is_correct);
+  //       }
+  //     });
+  // });
 
   
 
-  function updateUserAns(selected_ans, is_correct) {
-    let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
-    userAnsObj[$currentQues] = user_ans;
-    console.log(userAnsObj);
-  }
+  // function updateUserAns(selected_ans, is_correct) {
+  //   let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
+  //   userAnsObj[$currentQues] = user_ans;
+  //   console.log(userAnsObj);
+  //   resultData = userAnsObj;
+  // }
    
 
-  // function onOptionClicked(event){
-  //   let selected_ans = event.target.value;
-  //   let is_correct = event.target.getAttribute('is_correct');
-  //   console.log(selected_ans , is_correct);
-  //   let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
-  //   userAnsObj[currentQues] = user_ans;
+  function onOptionClicked(event){
+    let selected_ans = event.target.value;
+    let is_correct = event.target.getAttribute('is_correct');
+    console.log(selected_ans , is_correct);
+    let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
+    userAnsObj[$currentQues] = user_ans;
+    resultData = userAnsObj;
+  }
 
-  // }
+  afterUpdate(() => {
+    $apiData.forEach(( item , index) => {
+        if(index == $currentQues){
+          $apiData[index].isAttempted = true;
+        }
+    })
+  })
+  
 
   let result = false;
   function endBtn() {
@@ -86,7 +97,7 @@
         {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
           <!-- svelte-ignore missing-declaration -->
 
-          <label for="ans{index}" id="option{index}" >
+          <label for="ans{index}" id="option{index}" on:click="{onOptionClicked}">
             <input
               type="radio"
               name="ans"
@@ -110,7 +121,7 @@
 {/if}
 {/if}
 {#if result}
-  <ResultPage />
+  <ResultPage resultData={resultData} />
 {/if}
 
 <style>

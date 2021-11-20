@@ -2,11 +2,10 @@
   import SideBar from './SideBar.svelte';
   import { createEventDispatcher } from 'svelte';
   import { onMount, beforeUpdate } from 'svelte';
-  import { apiData, index } from './store/quesStore';
+  import { apiData, pageNumber } from './store/quesStore';
   // import ReviewPage from './ReviewPage.svelte';
   const dispatch = createEventDispatcher();
   let sideBarShow = false;
-  // export let index = 1;
   let nextDisabled = false;
   let prevDisabled = true;
 
@@ -33,10 +32,10 @@
   function navigateItem(action) {
     let dispatch_event = '';
     if (action == 'prev') {
-      index.update((pagenum) => pagenum - 1);
+      pageNumber.update((pagenum) => pagenum - 1);
       dispatch_event = 'prevques';
     } else if (action == 'next') {
-      index.update((pagenum) => pagenum + 1);
+      pageNumber.update((pagenum) => pagenum + 1);
 
       dispatch_event = 'nextques';
     } else if (action === 'end') {
@@ -45,12 +44,12 @@
     dispatch(dispatch_event);
   }
   beforeUpdate(() => {
-    if ($index >= $apiData.length) {
+    if ($pageNumber >= $apiData.length) {
       nextDisabled = true;
     } else {
       nextDisabled = false;
     }
-    if ($index < 2) {
+    if ($pageNumber < 2) {
       prevDisabled = true;
     } else {
       prevDisabled = false;
@@ -77,7 +76,7 @@
       disabled={prevDisabled}>Previous</button
     >
 
-    <span><p><b>{$index} of {$apiData.length}</b></p></span>
+    <span><p><b>{$pageNumber} of {$apiData.length}</b></p></span>
     <button
       type="button"
       class="toggleBtn"
