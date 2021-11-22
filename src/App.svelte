@@ -1,7 +1,7 @@
 <script>
   import Header from './UI/Header.svelte';
   import Footer from './UI/Footer.svelte';
-  import { apiData, currentQues } from './UI/store/quesStore.js';
+  import { apiData, currentQues,attempted } from './UI/store/quesStore.js';
   import { userAnsObj } from './UI/store/ansStore';
   import ResultPage from './UI/ResultPage.svelte';
 
@@ -24,17 +24,27 @@
   }
 
   function initialise($currentQues) {
-    if (!($userAnsObj[$currentQues])) {
-      let user_ans = { chosenAns: '', isCorrect: '' };
+    if (!$userAnsObj[$currentQues]) {
+      let user_ans = { chosenAns: '', isCorrect: '', quesNumber: $currentQues };
       $userAnsObj[$currentQues] = user_ans;
     }
   }
-  
+  initialise($currentQues);
 
   function onOptionClicked(event) {
+    console.log($currentQues ,$userAnsObj);
+    if ($userAnsObj[$currentQues].isCorrect =='') {
+      // attempted.update((attemp) => attemp + 1);
+      $attempted +=1;
+    }
+
     let selected_ans = event.target.value;
     let is_correct = event.target.getAttribute('is_correct');
-    let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
+    let user_ans = {
+      chosenAns: selected_ans,
+      isCorrect: is_correct,
+      quesNumber: $currentQues,
+    };
     $userAnsObj[$currentQues] = user_ans;
   }
 
@@ -91,7 +101,7 @@
   {/if}
 {/if}
 {#if result}
-  <ResultPage  />
+  <ResultPage />
 {/if}
 
 <style>

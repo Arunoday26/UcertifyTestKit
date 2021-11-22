@@ -62,7 +62,7 @@
     <div id="timer">
       <p>{min}:{sec}</p>
     </div>
-    
+
     <button
       type="button"
       class="toggleBtn"

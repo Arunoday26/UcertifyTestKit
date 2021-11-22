@@ -7,31 +7,44 @@
     pageNumber,
     attempted,
   } from './store/quesStore';
+  import { userAnsObj } from './store/ansStore';
   function jumpQuest(i) {
     currentQues.set(i);
     pageNumber.set(i + 1);
+    let user_ans = { chosenAns: '', isCorrect: '', quesNumber: i };
+    $userAnsObj[i] = user_ans;
+  }
+export let quesList = $apiData;
+  function onItemClicked(type){
+    if(type == 'attempted'){
+      quesList = $apiData.filter((item , index) => {
+        return $userAnsObj.hasOwnProperty(index) && $userAnsObj[index].isCorrect != '' ;
+      })
+    }
+    if(type == 'unattempted'){
+      quesList = $apiData.filter((item , index) => {
+        return !$userAnsObj.hasOwnProperty(index)  || ($userAnsObj.hasOwnProperty(index) && $userAnsObj[index].isCorrect == '') ;
+      })
+    }
+    if(type == 'all'){
+      quesList = $apiData;
+    }
   }
   export let unAttempted = 0;
   afterUpdate(() => {
-    // console.log($apiData.length , $attempted);
-    $apiData.forEach((item, index) => {
-      if (!item.isAttempted && index == $currentQues) {
-        attempted.update((attemp) => attemp + 1);
-        $apiData[index].isAttempted = true;
-        unAttempted = $apiData.length - $attempted;
-      }
-    });
+    console.log($attempted);
+    unAttempted = $apiData.length - $attempted;
   });
   export let show = false;
 </script>
 
 {#if show}
   <nav transition:fly={{ x: -550, opacity: 1 }}>
-    <div class="allItem">All Item:{$apiData.length}</div>
-    <div class="allItem">Attempted: {$attempted}</div>
-    <div class="allItem">UnAttempted:{unAttempted}</div>
+    <div class="allItem"  on:click={() => onItemClicked("all")}>All Item:{$apiData.length}</div>
+    <div class="allItem" on:click={() => onItemClicked('attempted')}>Attempted: {$attempted}</div>
+    <div class="allItem" on:click={() => onItemClicked('unattempted')}>UnAttempted:{unAttempted}</div>
     <ol>
-      {#each $apiData as dataItem, i (dataItem)}
+      {#each quesList as dataItem, i (dataItem)}
         <li id="list{i}">
           <button id="ques-btn{i}" class="nav-btn" on:click={() => jumpQuest(i)}
             >{JSON.parse(dataItem.content_text).question}</button
@@ -64,5 +77,6 @@
 
   .allItem {
     border: 2px solid black;
+    cursor: pointer;
   }
 </style>

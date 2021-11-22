@@ -4,8 +4,10 @@
 
 <footer>
   <div class="divBoard">
+    <button type="button" class="dashBoard">Previous</button>
+    <button type="button" class="dashBoard">Next</button>
+    <div>1 of {$apiData.length}</div>
     <button type="button" class="dashBoard">Dashboard</button>
-    <button type="button" class="dashBoard">Result</button>
   </div>
 </footer>
 
