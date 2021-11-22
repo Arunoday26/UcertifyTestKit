@@ -10,7 +10,7 @@ async function fetchUserData(data, set) {
   fetch('ques.json')
     .then((response) => response.json())
     .then((data) => {
-    const updatedData =  data.map((item) => {
+      const updatedData = data.map((item) => {
         item.isAttempted = false;
         return item;
       })

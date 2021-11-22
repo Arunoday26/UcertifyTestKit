@@ -3,7 +3,7 @@
   import { createEventDispatcher } from 'svelte';
   import { onMount, beforeUpdate } from 'svelte';
   import { apiData, pageNumber } from './store/quesStore';
-  // import ReviewPage from './ReviewPage.svelte';
+  import ResultPage from './ResultPage.svelte';
   const dispatch = createEventDispatcher();
   let sideBarShow = false;
   let nextDisabled = false;
@@ -62,6 +62,7 @@
     <div id="timer">
       <p>{min}:{sec}</p>
     </div>
+    
     <button
       type="button"
       class="toggleBtn"

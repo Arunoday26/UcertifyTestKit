@@ -1,18 +1,39 @@
 <script>
-  import { apiData } from './store/quesStore';
-  // export let resultData;
-  // console.log(JSON.parse($apiData[0].content_text));
+  import { apiData, attempted } from './store/quesStore';
+  import { userAnsObj } from './store/ansStore';
+  import { afterUpdate } from 'svelte';
+  
   export const quesExplMap = {};
-  function onQuesClicked(event){
+  function onQuesClicked(event) {
     quesExplMap[event?.target?.dataset?.id] = true;
 
   }
+  export let unAttempted = 0;
+
+  export let correctAns = 0;
+  export let inCorrectAns = 0;
+  export let score = 0;
+  unAttempted = $apiData.length - $attempted;
+
+  afterUpdate(() => {
+    Object.keys($userAnsObj).forEach((ques) => {
+      if ($userAnsObj[ques].isCorrect == '1') {
+        correctAns += 1;
+      } else if ($userAnsObj[ques].isCorrect == '0') {
+        inCorrectAns += 1;
+      }
+      score = (correctAns / $apiData.length) * 100;
+    });
+  });
 </script>
 
+<!-- svelte-ignore missing-declaration -->
 <header>
   <img id="logo" alt="uCertify Logo" src="Image/ucertifyLogo.png" />
   <h1 id="test-name">uCertify Result</h1>
 </header>
+<button type="button" class="dashBoard">Dashboard</button>
+
 <div class="rsltDeclartion">
   <div class="data-item">
     <p>All Item</p>
@@ -20,23 +41,23 @@
   </div>
   <div class="data-item">
     <p>Attempted</p>
-    <p class="dataItem">{$apiData.length}</p>
+    <p class="dataItem">{$attempted}</p>
   </div>
   <div class="data-item">
     <p>UnAttempted</p>
-    <p class="dataItem">{$apiData.length}</p>
+    <p class="dataItem">{unAttempted}</p>
   </div>
   <div class="data-item">
     <p>Correct Answer</p>
-    <p class="dataItem">{$apiData.length}</p>
+    <p class="dataItem">{correctAns}</p>
   </div>
   <div class="data-item">
     <p>InCorrect Answer</p>
-    <p class="dataItem">{$apiData.length}</p>
+    <p class="dataItem">{inCorrectAns}</p>
   </div>
 </div>
 
-<div><h2 class="totalResult">Total Result</h2></div>
+<div><h2 class="totalResult">Total Result:{score}%</h2></div>
 <div class="outerContainer">
   <div class="container">
     <div class="column-left">Index No</div>
@@ -47,19 +68,27 @@
     <div class="container">
       <div class="column-left">{i + 1}</div>
       <!-- svelte-ignore a11y-missing-attribute -->
-      <a class="column-center" on:click="{onQuesClicked}" data-id="{dataItem.content_id}"
+      <a
+        class="column-center"
+        on:click={onQuesClicked}
+        data-id={dataItem.content_id}
         >{JSON.parse(dataItem.content_text).question}</a
       >
       {#if quesExplMap[dataItem.content_id]}
-      <div>
-        {JSON.parse(dataItem.content_text).explanation}
-      </div>
+        <div class="explanation">
+          {JSON.parse(dataItem.content_text).explanation}
+        </div>
       {/if}
       <div class="column-right">
         {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-        <p  class= {ans.is_correct == '1' ? 'correctCircleContainer' : 'circleContainer'}> {index+1}</p>
+          <p
+            class={ans.is_correct == '1'
+              ? 'correctCircleContainer'
+              : 'circleContainer'}
+          >
+            {index + 1}
+          </p>
         {/each}
-
       </div>
     </div>
   {/each}
@@ -158,10 +187,20 @@
     border-radius: 50%;
     padding: 5px;
   }
-  .correctCircleContainer{
+  .correctCircleContainer {
     border: 2px solid black;
     border-radius: 50%;
     padding: 5px;
     background-color: green;
+  }
+  .dashBoard {
+    border: 2px solid black;
+    background: #cf0056;
+    border-radius: 5px;
+    margin-top: 20px;
+    width: 18%;
+  }
+  .dashBoard:hover {
+    background-color: #e095b4;
   }
 </style>

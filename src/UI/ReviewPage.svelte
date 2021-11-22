@@ -1,4 +1,5 @@
 <script>
+  import {apiData} from './store/quesStore';
 </script>
 
 <footer>

@@ -1,32 +1,35 @@
 <script>
   import { fly } from 'svelte/transition';
-  import {afterUpdate} from 'svelte';
-  import { apiData, currentQues, pageNumber,attempted } from './store/quesStore';
+  import { afterUpdate } from 'svelte';
+  import {
+    apiData,
+    currentQues,
+    pageNumber,
+    attempted,
+  } from './store/quesStore';
   function jumpQuest(i) {
     currentQues.set(i);
     pageNumber.set(i + 1);
   }
-  
+  export let unAttempted = 0;
   afterUpdate(() => {
-    $apiData.forEach((item, index) =>{
-      if(item.isAttempted && index == $currentQues){
-      console.log(item , $currentQues , index);
-
-        attempted.update((attemp) => attemp+1);
+    // console.log($apiData.length , $attempted);
+    $apiData.forEach((item, index) => {
+      if (!item.isAttempted && index == $currentQues) {
+        attempted.update((attemp) => attemp + 1);
+        $apiData[index].isAttempted = true;
+        unAttempted = $apiData.length - $attempted;
       }
-
-   })
-   
-  })
+    });
+  });
   export let show = false;
-
 </script>
 
 {#if show}
   <nav transition:fly={{ x: -550, opacity: 1 }}>
     <div class="allItem">All Item:{$apiData.length}</div>
     <div class="allItem">Attempted: {$attempted}</div>
-    <div class="allItem">UnAttempted:</div>
+    <div class="allItem">UnAttempted:{unAttempted}</div>
     <ol>
       {#each $apiData as dataItem, i (dataItem)}
         <li id="list{i}">
@@ -59,7 +62,7 @@
     text-overflow: ellipsis;
   }
 
-  .allItem{
+  .allItem {
     border: 2px solid black;
   }
 </style>

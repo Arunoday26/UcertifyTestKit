@@ -1,20 +1,17 @@
 <script>
-  import { afterUpdate } from 'svelte';
   import Header from './UI/Header.svelte';
   import Footer from './UI/Footer.svelte';
   import { apiData, currentQues } from './UI/store/quesStore.js';
   import { userAnsObj } from './UI/store/ansStore';
-  import ResultPage from './UI/ResultPage.svelte'
+  import ResultPage from './UI/ResultPage.svelte';
 
   let startBtn = true;
   let startQuiz = false;
   let quizPage = true;
-  let resultData = [];
   function quizDisplay() {
     startQuiz = true;
     startBtn = false;
   }
-  
 
   async function nextQuest() {
     currentQues.update((ques) => ques + 1);
@@ -27,51 +24,19 @@
   }
 
   function initialise($currentQues) {
-    if (!($currentQues in userAnsObj)) {
+    if (!($userAnsObj[$currentQues])) {
       let user_ans = { chosenAns: '', isCorrect: '' };
-      userAnsObj[$currentQues] = user_ans;
+      $userAnsObj[$currentQues] = user_ans;
     }
   }
-  // afterUpdate(() => {
-  //   document
-  //     .querySelector('#question_section')
-  //     ?.addEventListener('click', function (event) {
-  //       let selected_ans = event.target.value;
-  //       console.log(selected_ans);
-  //       let is_correct = event.target.getAttribute('is_correct');
-  //       if (selected_ans != undefined) {
-  //         updateUserAns(selected_ans, is_correct);
-  //       }
-  //     });
-  // });
-
   
 
-  // function updateUserAns(selected_ans, is_correct) {
-  //   let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
-  //   userAnsObj[$currentQues] = user_ans;
-  //   console.log(userAnsObj);
-  //   resultData = userAnsObj;
-  // }
-   
-
-  function onOptionClicked(event){
+  function onOptionClicked(event) {
     let selected_ans = event.target.value;
     let is_correct = event.target.getAttribute('is_correct');
-    console.log(selected_ans , is_correct);
     let user_ans = { chosenAns: selected_ans, isCorrect: is_correct };
-    userAnsObj[$currentQues] = user_ans;
-    resultData = userAnsObj;
+    $userAnsObj[$currentQues] = user_ans;
   }
-
-  afterUpdate(() => {
-    $apiData.forEach(( item , index) => {
-        if(index == $currentQues){
-          $apiData[index].isAttempted = true;
-        }
-    })
-  })
-  
 
   let result = false;
   function endBtn() {
@@ -82,46 +47,51 @@
     }
   }
 </script>
+
 {#if quizPage}
-<Header />
+  <Header />
 
-{#if startBtn}
-  <button class="startBtn" on:click={() => quizDisplay()}>Start Test</button>
-{/if}
+  {#if startBtn}
+    <button class="startBtn" on:click={() => quizDisplay()}>Start Test</button>
+  {/if}
 
-{#if startQuiz}
-  {#each $apiData as dataItem, i (dataItem)}
-    {#if $currentQues == i}
-      <p>{JSON.parse(dataItem.content_text).question}</p>
-      <div id="question_section" >
-        {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-          <!-- svelte-ignore missing-declaration -->
+  {#if startQuiz}
+    {#each $apiData as dataItem, i (dataItem)}
+      {#if $currentQues == i}
+        <p>{JSON.parse(dataItem.content_text).question}</p>
+        <div id="question_section">
+          {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
+            <!-- svelte-ignore missing-declaration -->
 
-          <label for="ans{index}" id="option{index}" on:click="{onOptionClicked}">
-            <input
-              type="radio"
-              name="ans"
-              id="ans{index}"
-              class="selectAns"
-              is_correct={ans.is_correct}
-              value={ans.answer}
-              checked={userAnsObj[$currentQues]?.chosenAns === ans.answer}
-            />
-            {ans.answer}
-          </label>
-        {/each}
-      </div>
-    {/if}
-  {/each}
-  <Footer
-    on:nextques={() => nextQuest()}
-    on:prevques={() => prevQuest()}
-    on:endques={() => endBtn()}
-  />
-{/if}
+            <label
+              for="ans{index}"
+              id="option{index}"
+              on:click={onOptionClicked}
+            >
+              <input
+                type="radio"
+                name="ans"
+                id="ans{index}"
+                class="selectAns"
+                is_correct={ans.is_correct}
+                value={ans.answer}
+                checked={$userAnsObj[$currentQues]?.chosenAns === ans.answer}
+              />
+              {ans.answer}
+            </label>
+          {/each}
+        </div>
+      {/if}
+    {/each}
+    <Footer
+      on:nextques={() => nextQuest()}
+      on:prevques={() => prevQuest()}
+      on:endques={() => endBtn()}
+    />
+  {/if}
 {/if}
 {#if result}
-  <ResultPage resultData={resultData} />
+  <ResultPage  />
 {/if}
 
 <style>
