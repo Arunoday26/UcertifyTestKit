@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 export const currentQues = writable(0);
 export const pageNumber = writable(1);
 export const attempted = writable(0);
+export let unAttempted = writable(0);
 
 
 export const apiData = writable([fetchUserData()]);

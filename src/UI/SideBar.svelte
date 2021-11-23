@@ -6,6 +6,7 @@
     currentQues,
     pageNumber,
     attempted,
+    unAttempted
   } from './store/quesStore';
   import { userAnsObj } from './store/ansStore';
   function jumpQuest(i) {
@@ -30,10 +31,9 @@ export let quesList = $apiData;
       quesList = $apiData;
     }
   }
-  export let unAttempted = 0;
+  // export let unAttempted = 0;
   afterUpdate(() => {
-    console.log($attempted);
-    unAttempted = $apiData.length - $attempted;
+    $unAttempted = $apiData.length - $attempted;
   });
   export let show = false;
 </script>
@@ -42,7 +42,7 @@ export let quesList = $apiData;
   <nav transition:fly={{ x: -550, opacity: 1 }}>
     <div class="allItem"  on:click={() => onItemClicked("all")}>All Item:{$apiData.length}</div>
     <div class="allItem" on:click={() => onItemClicked('attempted')}>Attempted: {$attempted}</div>
-    <div class="allItem" on:click={() => onItemClicked('unattempted')}>UnAttempted:{unAttempted}</div>
+    <div class="allItem" on:click={() => onItemClicked('unattempted')}>UnAttempted:{$unAttempted}</div>
     <ol>
       {#each quesList as dataItem, i (dataItem)}
         <li id="list{i}">
@@ -61,8 +61,6 @@ export let quesList = $apiData;
     top: 13.2%;
     left: 0;
     height: 75%;
-    /* width: 30%; */
-    /* padding: 35px; */
     border-right: 2px solid #aaa;
     background: #fff;
     white-space: nowrap;

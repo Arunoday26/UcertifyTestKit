@@ -1,5 +1,5 @@
 <script>
-  import { apiData, attempted } from './store/quesStore';
+  import { apiData, attempted, unAttempted , currentQues } from './store/quesStore';
   import { userAnsObj } from './store/ansStore';
   import { afterUpdate } from 'svelte';
   import ReviewPage from './ReviewPage.svelte';
@@ -12,11 +12,22 @@
     review = true;
   }
 
-  export let unAttempted = 0;
+  console.log(quesExplMap);
+
+ $apiData.forEach((item,index) => {
+  // console.log($apiData[index].content_id);
+
+ })
+  async function nextQuest() {
+    
+  }
+
+  async function prevQuest() {
+    
+  }
   export let correctAns = 0;
   export let inCorrectAns = 0;
   export let score = 0;
-  unAttempted = $apiData.length - $attempted;
 
   afterUpdate(() => {
     Object.keys($userAnsObj).forEach((ques) => {
@@ -25,7 +36,7 @@
       } else if ($userAnsObj[ques].isCorrect == '0') {
         inCorrectAns += 1;
       }
-      score = (correctAns / $apiData.length) * 100;
+      score = ((correctAns / $apiData.length) * 100).toFixed(2);
     });
   });
 </script>
@@ -47,7 +58,7 @@
     </div>
     <div class="data-item">
       <p>UnAttempted</p>
-      <p class="dataItem">{unAttempted}</p>
+      <p class="dataItem">{$unAttempted}</p>
     </div>
     <div class="data-item">
       <p>Correct Answer</p>
@@ -82,7 +93,7 @@
             <p
               class={ans.is_correct == '1'
                 ? 'correctCircleContainer'
-                : 'circleContainer'}
+                : 'circleContainer' || 'userAns' }
             >
               {index + 1}
             </p>
@@ -99,13 +110,23 @@
         <div class="question">
           {JSON.parse(dataItem.content_text).question}
         </div>
-        <div class="explanation">
-          {JSON.parse(dataItem.content_text).explanation}
+        {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
+        <p
+          class={ans.is_correct == '1'
+            ? 'correctLineContainer'
+            : 'lineContainer' }
+        >
+          {ans.answer};
+        </p>
+      {/each}
+      <div  class="explanation"><strong>Explanation:</strong></div>
+        <div>
+       {JSON.parse(dataItem.content_text).explanation}
         </div>
       </div>
     {/if}
   {/each}
-  <ReviewPage />
+  <ReviewPage on:nextques={() => nextQuest()} on:prevques={() => prevQuest()} />
 {/if}
 
 <style>
@@ -138,7 +159,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     border: 2px solid #cf0056;
-    margin: 70px;
+    margin: 40px;
   }
 
   .data-item {
@@ -147,6 +168,9 @@
     flex-direction: column;
     text-align: center;
     /* padding: 50px; */
+  }
+  .explanation{
+    border-top: 2px solid red;
   }
 
   .totalResult {
@@ -202,14 +226,17 @@
     padding: 5px;
   }
   .correctCircleContainer {
-    border: 2px solid black;
+    border: 3px solid #56e056;
     border-radius: 50%;
     padding: 5px;
-    background-color: green;
   }
+  .correctLineContainer{
+    color: #56e056;
+  }
+ 
   .Explain-outer {
     margin: 30px;
-    padding: 30px;
+    padding: 10px;
     border: 2px solid red;
   }
   .question {

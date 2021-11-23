@@ -3,8 +3,9 @@
   import { createEventDispatcher } from 'svelte';
   import { onMount, beforeUpdate } from 'svelte';
   import { apiData, pageNumber } from './store/quesStore';
+  import Modal from './Modal.svelte';
   import ResultPage from './ResultPage.svelte';
-  const dispatch = createEventDispatcher();
+  let dispatch = createEventDispatcher();
   let sideBarShow = false;
   let nextDisabled = false;
   let prevDisabled = true;
@@ -38,10 +39,8 @@
       pageNumber.update((pagenum) => pagenum + 1);
 
       dispatch_event = 'nextques';
-    } else if (action === 'end') {
-      dispatch_event = 'endques';
     }
-    dispatch(dispatch_event);
+       dispatch(dispatch_event);
   }
   beforeUpdate(() => {
     if ($pageNumber >= $apiData.length) {
@@ -55,6 +54,20 @@
       prevDisabled = false;
     }
   });
+
+  export let isOpenModal = false;
+
+  function closeModal() {
+    isOpenModal = false;
+    dispatch('closeModal', { isOpenModal });
+  }
+  function openModal() {
+    isOpenModal = true;
+  }
+  function confirmModal() {
+    dispatch('confrim');
+  }
+
 </script>
 
 <footer>
@@ -85,12 +98,14 @@
       on:click={() => navigateItem('next')}
       disabled={nextDisabled}>Next</button
     >
-    <button type="submit" class="toggleBtn" on:click={() => navigateItem('end')}
+    <button type="submit" class="toggleBtn" on:click={openModal}
       >End Test</button
     >
+    <Modal {isOpenModal} on:closeModal={closeModal} on:confrim={confirmModal} />
   </div>
 </footer>
 
+<!-- {/if} -->
 <style>
   footer {
     border-top: 2px solid black;

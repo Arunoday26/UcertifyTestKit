@@ -1,7 +1,7 @@
 <script>
   import Header from './UI/Header.svelte';
   import Footer from './UI/Footer.svelte';
-  import { apiData, currentQues,attempted } from './UI/store/quesStore.js';
+  import { apiData, currentQues, attempted } from './UI/store/quesStore.js';
   import { userAnsObj } from './UI/store/ansStore';
   import ResultPage from './UI/ResultPage.svelte';
 
@@ -32,10 +32,9 @@
   initialise($currentQues);
 
   function onOptionClicked(event) {
-    console.log($currentQues ,$userAnsObj);
-    if ($userAnsObj[$currentQues].isCorrect =='') {
-      // attempted.update((attemp) => attemp + 1);
-      $attempted +=1;
+    if ($userAnsObj[$currentQues].isCorrect == '') {
+      attempted.update((attemp) => attemp + 1);
+      // $attempted +=1;
     }
 
     let selected_ans = event.target.value;
@@ -50,11 +49,16 @@
 
   let result = false;
   function endBtn() {
-    let okClk = confirm('Are you want to End the test!');
-    if (okClk == true) {
-      result = true;
-      quizPage = false;
-    }
+    // let okClk = confirm('Are you want to End the test!');
+    // if (okClk == true) {
+    result = true;
+    quizPage = false;
+    // }
+  }
+  let isOpenModal = false;
+
+  function closeModal() {
+    isOpenModal = false;
   }
 </script>
 
@@ -93,11 +97,9 @@
         </div>
       {/if}
     {/each}
-    <Footer
-      on:nextques={() => nextQuest()}
-      on:prevques={() => prevQuest()}
-      on:endques={() => endBtn()}
-    />
+    <Footer on:nextques={() => nextQuest()} on:prevques={() => prevQuest()}
+      on:closeModal={closeModal} on:confrim={endBtn}
+      />
   {/if}
 {/if}
 {#if result}

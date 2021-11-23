@@ -1,73 +1,91 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from 'svelte';
+  import { apiData, attempted, unAttempted } from './store/quesStore';
 
+  const dispatch = createEventDispatcher();
 
-  
-    const dispatch = createEventDispatcher();
-  
-    function closeModal() {
-      dispatch("cancel");
-    }
-  </script>
-  
-  <style>
-    .modal-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 10;
-    }
-  
-    .modal {
-      position: fixed;
-      top: 10vh;
-      left: 10%;
-      width: 80%;
-      max-height: 80vh;
-      background: white;
-      border-radius: 5px;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-      overflow: scroll;
-    }
-  
-    h1 {
-      padding: 1rem;
-      margin: 0;
-      border-bottom: 1px solid #ccc;
-      font-family: "Roboto Slab", sans-serif;
-    }
-  
-    .content {
-      padding: 1rem;
-    }
-  
-    footer {
-      padding: 1rem;
-    }
-  
-    @media (min-width: 768px) {
-      .modal {
-        width: 40rem;
-        left: calc(50% - 20rem);
-      }
-    }
-  </style>
-  
-  <div class="modal-backdrop" on:click={closeModal} />
-  <div class="modal">
-    <h1>Are you want to End Test</h1>
+  export let isOpenModal;
+
+  function closeModal() {
+    isOpenModal = false;
+    dispatch('closeModal', { isOpenModal });
+  }
+  function confirmModal() {
+    dispatch('confrim');
+  }
+</script>
+
+<div
+  id="background"
+  style="--display: {isOpenModal ? 'block' : 'none'};"
+  on:click={closeModal}
+/>
+<div id="modal" style="--display: {isOpenModal ? 'block' : 'none'};">
+  <h2>Are you want to End test?</h2>
+  <div class="innerContent"><strong>Attempted:{$attempted}</strong></div>
+  <div class="innerContent"><strong>UnAttempted:{$unAttempted}</strong></div>
+  <footer>
     <div class="content">
-      <slot />
+      <button class="btn" type="submit" on:click={confirmModal}>Confirm</button>
+      <button class="btn" type="button" on:click={closeModal}>Cancel</button>
     </div>
-    <footer>
-      <slot name="footer">
-        <button on:click={closeModal}>confirm</button>
-        <button on:click={closeModal}>Close</button>
-      </slot>
-    </footer>
-  </div>
-  
+  </footer>
+</div>
+
+<style>
+  #background {
+    display: var(--display);
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 30%;
+    height: 30%;
+  }
+
+  #modal {
+    display: var(--display);
+    position: fixed;
+    border: 2px solid red;
+    z-index: 2;
+    height: 200px;
+    padding: 100px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    filter: drop-shadow(0 0 20px #333);
+  }
+  footer {
+    border-top: 2px solid black;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(241, 226, 206);
+  }
+  footer .content {
+    max-width: 500px;
+    margin: auto;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .innerContent {
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: rgb(197, 26, 26);
+  }
+  .btn {
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 18%;
+  }
+  .btn:hover {
+    background-color: #b0bbbb;
+  }
+</style>
