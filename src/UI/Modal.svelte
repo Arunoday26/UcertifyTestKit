@@ -16,11 +16,11 @@
 </script>
 
 <div
-  id="background"
+  class="background"
   style="--display: {isOpenModal ? 'block' : 'none'};"
   on:click={closeModal}
 />
-<div id="modal" style="--display: {isOpenModal ? 'block' : 'none'};">
+<div class="modal" style="--display: {isOpenModal ? 'block' : 'none'};">
   <h2>Are you want to End test?</h2>
   <div class="innerContent"><strong>Attempted:{$attempted}</strong></div>
   <div class="innerContent"><strong>UnAttempted:{$unAttempted}</strong></div>
@@ -33,20 +33,21 @@
 </div>
 
 <style>
-  #background {
+  .background {
     display: var(--display);
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    width: 30%;
-    height: 30%;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.66);
   }
 
-  #modal {
+  .modal {
     display: var(--display);
     position: fixed;
-    border: 2px solid red;
+    border: 2px solid rgb(173, 40, 40);
     z-index: 2;
     height: 200px;
     padding: 100px;
@@ -54,7 +55,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: #fff;
-    filter: drop-shadow(0 0 20px #333);
+    filter: drop-shadow(0px 0px 500px black);
   }
   footer {
     border-top: 2px solid black;
@@ -74,16 +75,19 @@
   }
   .innerContent {
     margin: 20px;
+    border: 2px solid rgb(173, 40, 40);
+    border-radius: 30px;
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: rgb(197, 26, 26);
+    background-color: rgb(211, 121, 121);
   }
   .btn {
     border: 2px solid black;
-    border-radius: 5px;
+    border-radius: 30px;
     width: 18%;
+    font-weight: bold;
   }
   .btn:hover {
     background-color: #b0bbbb;

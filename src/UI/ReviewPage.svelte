@@ -1,25 +1,53 @@
 <script>
-  import {apiData } from './store/quesStore';
-  import {createEventDispatcher} from 'svelte';
+  import { beforeUpdate } from 'svelte';
+  import { apiData } from './store/quesStore';
+  import { createEventDispatcher } from 'svelte';
   let dispatch = createEventDispatcher();
+  export let visibleQues;
+  let nextDisabled = false;
+  let prevDisabled = true;
   function navigateItem(action) {
-    let dispatch_event = '';
     if (action == 'prev') {
-      dispatch_event = 'prevques';
+      dispatch('nextques', {
+        visibleQues: visibleQues - 1,
+      });
     } else if (action == 'next') {
-
-      dispatch_event = 'nextques';
+      dispatch('nextques', {
+        visibleQues: visibleQues + 1,
+      });
     }
-       dispatch(dispatch_event);
+  }
+  beforeUpdate(() => {
+    if (visibleQues > $apiData.length-2) {
+      nextDisabled = true;
+    } else {
+      nextDisabled = false;
+    }
+    if (visibleQues < 1) {
+      prevDisabled = true;
+    } else {
+      prevDisabled = false;
+    }
+  });
+  function reload() {
+    location.reload();
   }
 </script>
 
 <footer>
   <div class="divBoard">
-    <button type="button" class="dashBoard"  on:click={() => navigateItem('prev')}>Previous</button>
-    <button type="button" class="dashBoard"  on:click={() => navigateItem('next')}>Next</button>
-    <div>1 of {$apiData.length}</div>
-    <button type="button" class="dashBoard">Dashboard</button>
+    <button
+      type="button"
+      class="dashBoard"
+      on:click={() => navigateItem('prev')} disabled={prevDisabled}>Previous</button
+    >
+    <span><p><b> {visibleQues + 1} of {$apiData.length}</b></p></span>
+    <button
+      type="button"
+      class="dashBoard"
+      on:click={() => navigateItem('next')} disabled={nextDisabled}>Next</button
+    >
+    <button type="button" class="dashBoard" on:click={reload}>Dashboard</button>
   </div>
 </footer>
 

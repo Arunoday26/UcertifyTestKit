@@ -1,9 +1,11 @@
 <script>
   import Header from './UI/Header.svelte';
   import Footer from './UI/Footer.svelte';
-  import { apiData, currentQues, attempted } from './UI/store/quesStore.js';
+  import { currentQues } from './UI/store/quesStore.js';
   import { userAnsObj } from './UI/store/ansStore';
   import ResultPage from './UI/ResultPage.svelte';
+  import QuesPage from './UI/QuesPage.svelte';
+import ReviewPage from './UI/ReviewPage.svelte';
 
   let startBtn = true;
   let startQuiz = false;
@@ -31,29 +33,10 @@
   }
   initialise($currentQues);
 
-  function onOptionClicked(event) {
-    if ($userAnsObj[$currentQues].isCorrect == '') {
-      attempted.update((attemp) => attemp + 1);
-      // $attempted +=1;
-    }
-
-    let selected_ans = event.target.value;
-    let is_correct = event.target.getAttribute('is_correct');
-    let user_ans = {
-      chosenAns: selected_ans,
-      isCorrect: is_correct,
-      quesNumber: $currentQues,
-    };
-    $userAnsObj[$currentQues] = user_ans;
-  }
-
   let result = false;
   function endBtn() {
-    // let okClk = confirm('Are you want to End the test!');
-    // if (okClk == true) {
     result = true;
     quizPage = false;
-    // }
   }
   let isOpenModal = false;
 
@@ -70,36 +53,14 @@
   {/if}
 
   {#if startQuiz}
-    {#each $apiData as dataItem, i (dataItem)}
-      {#if $currentQues == i}
-        <p>{JSON.parse(dataItem.content_text).question}</p>
-        <div id="question_section">
-          {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-            <!-- svelte-ignore missing-declaration -->
+    <QuesPage />
 
-            <label
-              for="ans{index}"
-              id="option{index}"
-              on:click={onOptionClicked}
-            >
-              <input
-                type="radio"
-                name="ans"
-                id="ans{index}"
-                class="selectAns"
-                is_correct={ans.is_correct}
-                value={ans.answer}
-                checked={$userAnsObj[$currentQues]?.chosenAns === ans.answer}
-              />
-              {ans.answer}
-            </label>
-          {/each}
-        </div>
-      {/if}
-    {/each}
-    <Footer on:nextques={() => nextQuest()} on:prevques={() => prevQuest()}
-      on:closeModal={closeModal} on:confrim={endBtn}
-      />
+    <Footer
+      on:nextques={() => nextQuest()}
+      on:prevques={() => prevQuest()}
+      on:closeModal={closeModal}
+      on:confrim={endBtn}
+    />
   {/if}
 {/if}
 {#if result}

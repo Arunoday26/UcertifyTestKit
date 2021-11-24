@@ -1,11 +1,16 @@
 <script>
-  import { apiData, attempted, unAttempted , currentQues } from './store/quesStore';
+  import {
+    apiData,
+    attempted,
+    unAttempted,
+    currentQues,
+  } from './store/quesStore';
   import { userAnsObj } from './store/ansStore';
   import { afterUpdate } from 'svelte';
   import ReviewPage from './ReviewPage.svelte';
   let result = true;
   let review = false;
-  export const quesExplMap = {};
+  export let quesExplMap = {};
   function onQuesClicked(event) {
     quesExplMap[event?.target?.dataset?.id] = true;
     result = false;
@@ -14,16 +19,16 @@
 
   console.log(quesExplMap);
 
- $apiData.forEach((item,index) => {
-  // console.log($apiData[index].content_id);
-
- })
-  async function nextQuest() {
-    
+  function nextQuest(ques) {
+    quesExplMap = {
+      [$apiData[ques?.detail?.visibleQues]?.content_id]: true,
+    };
   }
 
-  async function prevQuest() {
-    
+  function prevQuest(ques) {
+    quesExplMap = {
+      [$apiData[ques?.detail?.visibleQues]?.content_id]: true,
+    };
   }
   export let correctAns = 0;
   export let inCorrectAns = 0;
@@ -93,7 +98,7 @@
             <p
               class={ans.is_correct == '1'
                 ? 'correctCircleContainer'
-                : 'circleContainer' || 'userAns' }
+                : 'circleContainer' || 'userAns'}
             >
               {index + 1}
             </p>
@@ -107,26 +112,31 @@
   {#each $apiData as dataItem, i (dataItem)}
     {#if quesExplMap[dataItem.content_id]}
       <div class="Explain-outer">
+        <!-- <QuesPage/> -->
         <div class="question">
           {JSON.parse(dataItem.content_text).question}
         </div>
         {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-        <p
-          class={ans.is_correct == '1'
-            ? 'correctLineContainer'
-            : 'lineContainer' }
-        >
-          {ans.answer};
-        </p>
-      {/each}
-      <div  class="explanation"><strong>Explanation:</strong></div>
+          <p
+            class={ans.is_correct == '1'
+              ? 'correctLineContainer'
+              : 'lineContainer'}
+          >
+            {ans.answer};
+          </p>
+        {/each}
+        <div class="explanation"><strong>Explanation:</strong></div>
         <div>
-       {JSON.parse(dataItem.content_text).explanation}
+          {JSON.parse(dataItem.content_text).explanation}
         </div>
       </div>
+      <ReviewPage
+        on:nextques={nextQuest}
+        on:prevques={prevQuest}
+        visibleQues={i}
+      />
     {/if}
   {/each}
-  <ReviewPage on:nextques={() => nextQuest()} on:prevques={() => prevQuest()} />
 {/if}
 
 <style>
@@ -169,7 +179,7 @@
     text-align: center;
     /* padding: 50px; */
   }
-  .explanation{
+  .explanation {
     border-top: 2px solid red;
   }
 
@@ -230,17 +240,18 @@
     border-radius: 50%;
     padding: 5px;
   }
-  .correctLineContainer{
+  .correctLineContainer {
     color: #56e056;
   }
- 
+
   .Explain-outer {
-    margin: 30px;
-    padding: 10px;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    padding: 5px;
     border: 2px solid red;
   }
   .question {
-    padding: 30px;
+    padding: 5px;
     border-bottom: 2px solid red;
   }
 </style>

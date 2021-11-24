@@ -13,7 +13,13 @@
     currentQues.set(i);
     pageNumber.set(i + 1);
     let user_ans = { chosenAns: '', isCorrect: '', quesNumber: i };
-    $userAnsObj[i] = user_ans;
+    if($userAnsObj[i]){
+      user_ans = { chosenAns: $userAnsObj[i].chosenAns, isCorrect: $userAnsObj[i].isCorrect, quesNumber: i };
+    }
+    else{
+
+      $userAnsObj[i] = user_ans;
+    }
   }
 export let quesList = $apiData;
   function onItemClicked(type){
