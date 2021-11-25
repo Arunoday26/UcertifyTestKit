@@ -43,6 +43,26 @@ import ReviewPage from './UI/ReviewPage.svelte';
   function closeModal() {
     isOpenModal = false;
   }
+   
+   function timeComplete(){
+     
+  onMount(() => {
+    timer = setInterval(() => {
+      sec--;
+      if (sec == 0) {
+        min--;
+        sec = 60;
+        if (min < 0) {
+          clearInterval(timer);
+          min = 0;
+          sec = 0;
+          alert('TimeOut');
+          resultPage = true;
+        }
+      }
+    }, 100);
+  });
+   }
 </script>
 
 {#if quizPage}

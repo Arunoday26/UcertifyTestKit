@@ -5,7 +5,6 @@
   import { apiData, pageNumber } from './store/quesStore';
   import Modal from './Modal.svelte';
   import ResultPage from './ResultPage.svelte';
-  let dispatch = createEventDispatcher();
   let sideBarShow = false;
   let nextDisabled = false;
   let prevDisabled = true;
