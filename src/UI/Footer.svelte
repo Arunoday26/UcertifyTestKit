@@ -1,33 +1,16 @@
 <script>
   import SideBar from './SideBar.svelte';
   import { createEventDispatcher } from 'svelte';
-  import { onMount, beforeUpdate } from 'svelte';
+  import { beforeUpdate } from 'svelte';
   import { apiData, pageNumber } from './store/quesStore';
   import Modal from './Modal.svelte';
-  import ResultPage from './ResultPage.svelte';
+  let dispatch = createEventDispatcher();
   let sideBarShow = false;
   let nextDisabled = false;
   let prevDisabled = true;
 
-  let min = 20;
-  let sec = 60;
-  let timer;
-
-  onMount(() => {
-    timer = setInterval(() => {
-      sec--;
-      if (sec == 0) {
-        min--;
-        sec = 60;
-        if (min < 0) {
-          clearInterval(timer);
-          min = 0;
-          sec = 0;
-          alert('TimeOut');
-        }
-      }
-    }, 1000);
-  });
+  export let min;
+  export let sec;
 
   function navigateItem(action) {
     let dispatch_event = '';
@@ -39,7 +22,7 @@
 
       dispatch_event = 'nextques';
     }
-       dispatch(dispatch_event);
+    dispatch(dispatch_event);
   }
   beforeUpdate(() => {
     if ($pageNumber >= $apiData.length) {
@@ -66,7 +49,6 @@
   function confirmModal() {
     dispatch('confrim');
   }
-
 </script>
 
 <footer>
@@ -104,7 +86,6 @@
   </div>
 </footer>
 
-<!-- {/if} -->
 <style>
   footer {
     border-top: 2px solid black;

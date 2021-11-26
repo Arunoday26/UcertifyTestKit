@@ -6,38 +6,46 @@
     currentQues,
     pageNumber,
     attempted,
-    unAttempted
+    unAttempted,
   } from './store/quesStore';
   import { userAnsObj } from './store/ansStore';
   function jumpQuest(i) {
     currentQues.set(i);
     pageNumber.set(i + 1);
     let user_ans = { chosenAns: '', isCorrect: '', quesNumber: i };
-    if($userAnsObj[i]){
-      user_ans = { chosenAns: $userAnsObj[i].chosenAns, isCorrect: $userAnsObj[i].isCorrect, quesNumber: i };
-    }
-    else{
-
+    if ($userAnsObj[i]) {
+      user_ans = {
+        chosenAns: $userAnsObj[i].chosenAns,
+        isCorrect: $userAnsObj[i].isCorrect,
+        quesNumber: i,
+      };
+    } else {
       $userAnsObj[i] = user_ans;
     }
   }
-export let quesList = $apiData;
-  function onItemClicked(type){
-    if(type == 'attempted'){
-      quesList = $apiData.filter((item , index) => {
-        return $userAnsObj.hasOwnProperty(index) && $userAnsObj[index].isCorrect != '' ;
-      })
+  export let quesList = $apiData;
+  function onItemClicked(type) {
+    if (type == 'attempted') {
+      quesList = $apiData.filter((item, index) => {
+        return (
+          $userAnsObj.hasOwnProperty(index) &&
+          $userAnsObj[index].isCorrect != ''
+        );
+      });
     }
-    if(type == 'unattempted'){
-      quesList = $apiData.filter((item , index) => {
-        return !$userAnsObj.hasOwnProperty(index)  || ($userAnsObj.hasOwnProperty(index) && $userAnsObj[index].isCorrect == '') ;
-      })
+    else if (type == 'unattempted') {
+      quesList = $apiData.filter((item, index) => {
+        return (
+          !$userAnsObj.hasOwnProperty(index) ||
+          ($userAnsObj.hasOwnProperty(index) &&
+            $userAnsObj[index].isCorrect == '')
+        );
+      });
     }
-    if(type == 'all'){
+   else if (type == 'all') {
       quesList = $apiData;
     }
   }
-  // export let unAttempted = 0;
   afterUpdate(() => {
     $unAttempted = $apiData.length - $attempted;
   });
@@ -46,9 +54,15 @@ export let quesList = $apiData;
 
 {#if show}
   <nav transition:fly={{ x: -550, opacity: 1 }}>
-    <div class="allItem"  on:click={() => onItemClicked("all")}>All Item:{$apiData.length}</div>
-    <div class="allItem" on:click={() => onItemClicked('attempted')}>Attempted: {$attempted}</div>
-    <div class="allItem" on:click={() => onItemClicked('unattempted')}>UnAttempted:{$unAttempted}</div>
+    <div class="allItem" on:click={() => onItemClicked('all')}>
+      All Item:{$apiData.length}
+    </div>
+    <div class="allItem" on:click={() => onItemClicked('attempted')}>
+      Attempted: {$attempted}
+    </div>
+    <div class="allItem" on:click={() => onItemClicked('unattempted')}>
+      UnAttempted:{$unAttempted}
+    </div>
     <ol>
       {#each quesList as dataItem, i (dataItem)}
         <li id="list{i}">

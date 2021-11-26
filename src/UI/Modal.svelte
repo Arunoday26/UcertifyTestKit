@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { apiData, attempted, unAttempted } from './store/quesStore';
+  import { attempted, unAttempted } from './store/quesStore';
 
   const dispatch = createEventDispatcher();
 

@@ -17,8 +17,6 @@
     review = true;
   }
 
-  console.log(quesExplMap);
-
   function nextQuest(ques) {
     quesExplMap = {
       [$apiData[ques?.detail?.visibleQues]?.content_id]: true,
