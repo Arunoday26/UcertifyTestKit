@@ -1,10 +1,5 @@
 <script>
-  import {
-    apiData,
-    attempted,
-    unAttempted,
-    currentQues,
-  } from './store/quesStore';
+  import { apiData, attempted, currentQues, unAttempted } from './store/quesStore';
   import { userAnsObj } from './store/ansStore';
   import { afterUpdate } from 'svelte';
   import ReviewPage from './ReviewPage.svelte';
@@ -31,7 +26,7 @@
   export let correctAns = 0;
   export let inCorrectAns = 0;
   export let score = 0;
-
+console.log($userAnsObj);
   afterUpdate(() => {
     Object.keys($userAnsObj).forEach((ques) => {
       if ($userAnsObj[ques].isCorrect == '1') {
@@ -96,7 +91,8 @@
             <p
               class={ans.is_correct == '1'
                 ? 'correctCircleContainer'
-                : 'circleContainer' || 'userAns'}
+                : 'circleContainer'
+                } 
             >
               {index + 1}
             </p>
@@ -115,13 +111,22 @@
           {JSON.parse(dataItem.content_text).question}
         </div>
         {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-          <p
-            class={ans.is_correct == '1'
-              ? 'correctLineContainer'
-              : 'lineContainer'}
-          >
-            {ans.answer};
-          </p>
+          
+          <label for="ans{index}" id="option{index}"  class={ans.is_correct == '1'
+          ? 'correctLineContainer'
+          : 'lineContainer'} >
+            <input 
+              type="radio"
+              name="ans"
+              id="ans{index}"
+              class="selectAns"
+              is_correct={ans.is_correct}
+              value={ans.answer}
+              checked={ans.is_correct === "1"}
+              disabled
+            />
+            {ans.answer}
+          </label>
         {/each}
         <div class="explanation"><strong>Explanation:</strong></div>
         <div>
@@ -138,6 +143,9 @@
 {/if}
 
 <style>
+  /* .userAns{
+    background: yellow;
+  } */
   #logo {
     position: relative;
     height: 100%;

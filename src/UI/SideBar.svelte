@@ -32,8 +32,7 @@
           $userAnsObj[index].isCorrect != ''
         );
       });
-    }
-    else if (type == 'unattempted') {
+    } else if (type == 'unattempted') {
       quesList = $apiData.filter((item, index) => {
         return (
           !$userAnsObj.hasOwnProperty(index) ||
@@ -41,8 +40,7 @@
             $userAnsObj[index].isCorrect == '')
         );
       });
-    }
-   else if (type == 'all') {
+    } else if (type == 'all') {
       quesList = $apiData;
     }
   }
@@ -57,13 +55,13 @@
     <div class="allItem" on:click={() => onItemClicked('all')}>
       All Item:{$apiData.length}
     </div>
-    <div class="allItem" on:click={() => onItemClicked('attempted')}>
+    <div class="attempted" on:click={() => onItemClicked('attempted')}>
       Attempted: {$attempted}
     </div>
-    <div class="allItem" on:click={() => onItemClicked('unattempted')}>
+    <div class="unattempted" on:click={() => onItemClicked('unattempted')}>
       UnAttempted:{$unAttempted}
     </div>
-    <ol>
+    <ul>
       {#each quesList as dataItem, i (dataItem)}
         <li id="list{i}">
           <button id="ques-btn{i}" class="nav-btn" on:click={() => jumpQuest(i)}
@@ -71,7 +69,7 @@
           >
         </li>
       {/each}
-    </ol>
+    </ul>
   </nav>
 {/if}
 
@@ -94,7 +92,24 @@
   }
 
   .allItem {
+    background: silver;
     border: 2px solid black;
+    font-weight: bold;
     cursor: pointer;
+    padding: 10px;
+  }
+  .attempted {
+    background: rgb(115, 214, 115);
+    border: 1px solid black;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+  }
+  .unattempted {
+    background: rgb(245, 154, 154);
+    border: 1px solid black;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
   }
 </style>
