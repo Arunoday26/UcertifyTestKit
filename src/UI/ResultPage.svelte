@@ -1,5 +1,10 @@
 <script>
-  import { apiData, attempted, currentQues, unAttempted } from './store/quesStore';
+  import {
+    apiData,
+    attempted,
+    currentQues,
+    unAttempted,
+  } from './store/quesStore';
   import { userAnsObj } from './store/ansStore';
   import { afterUpdate } from 'svelte';
   import ReviewPage from './ReviewPage.svelte';
@@ -11,6 +16,7 @@
     result = false;
     review = true;
   }
+  console.log($userAnsObj);
 
   function nextQuest(ques) {
     quesExplMap = {
@@ -26,7 +32,7 @@
   export let correctAns = 0;
   export let inCorrectAns = 0;
   export let score = 0;
-console.log($userAnsObj);
+  // console.log($userAnsObj);
   afterUpdate(() => {
     Object.keys($userAnsObj).forEach((ques) => {
       if ($userAnsObj[ques].isCorrect == '1') {
@@ -91,8 +97,10 @@ console.log($userAnsObj);
             <p
               class={ans.is_correct == '1'
                 ? 'correctCircleContainer'
-                : 'circleContainer'
-                } 
+                : $userAnsObj.hasOwnProperty(i) &&
+                  $userAnsObj[i].chosenAns == ans.answer
+                ? 'wrongCircleContainer'
+                : 'circleContainer'}
             >
               {index + 1}
             </p>
@@ -111,18 +119,25 @@ console.log($userAnsObj);
           {JSON.parse(dataItem.content_text).question}
         </div>
         {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-          
-          <label for="ans{index}" id="option{index}"  class={ans.is_correct == '1'
-          ? 'correctLineContainer'
-          : 'lineContainer'} >
-            <input 
+          <label
+            for="ans{index}"
+            id="option{index}"
+            class={ans.is_correct == '1'
+              ? 'correctLineContainer'
+              : $userAnsObj.hasOwnProperty(i) &&
+                $userAnsObj[i].chosenAns == ans.answer
+              ? 'wrongLineContainer'
+              : 'LineContainer'}
+          >
+            <input
               type="radio"
               name="ans"
               id="ans{index}"
               class="selectAns"
               is_correct={ans.is_correct}
               value={ans.answer}
-              checked={ans.is_correct === "1"}
+              checked={$userAnsObj.hasOwnProperty(i) &&
+                $userAnsObj[i].chosenAns == ans.answer}
               disabled
             />
             {ans.answer}
@@ -246,8 +261,16 @@ console.log($userAnsObj);
     border-radius: 50%;
     padding: 5px;
   }
+  .wrongCircleContainer {
+    border: 3px solid red;
+    border-radius: 50%;
+    padding: 5px;
+  }
   .correctLineContainer {
     color: #56e056;
+  }
+  .wrongLineContainer {
+    color: red;
   }
 
   .Explain-outer {
