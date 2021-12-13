@@ -32,7 +32,6 @@
   export let correctAns = 0;
   export let inCorrectAns = 0;
   export let score = 0;
-  // console.log($userAnsObj);
   afterUpdate(() => {
     Object.keys($userAnsObj).forEach((ques) => {
       if ($userAnsObj[ques].isCorrect == '1') {
@@ -114,7 +113,6 @@
   {#each $apiData as dataItem, i (dataItem)}
     {#if quesExplMap[dataItem.content_id]}
       <div class="Explain-outer">
-        <!-- <QuesPage/> -->
         <div class="question">
           {JSON.parse(dataItem.content_text).question}
         </div>
@@ -158,9 +156,6 @@
 {/if}
 
 <style>
-  /* .userAns{
-    background: yellow;
-  } */
   #logo {
     position: relative;
     height: 100%;

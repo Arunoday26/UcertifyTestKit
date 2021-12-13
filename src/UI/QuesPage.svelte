@@ -16,13 +16,13 @@
     $userAnsObj[$currentQues] = user_ans;
   }
 </script>
-
-{#each $apiData as dataItem, i (dataItem)}
+<div class="main-body">
+  {#each $apiData as dataItem, i (dataItem)}
   {#if $currentQues == i}
-    <p>{JSON.parse(dataItem.content_text).question}</p>
+    <p class="show-ques">{JSON.parse(dataItem.content_text).question}</p>
     <div id="question_section" >
       {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-        <label for="ans{index}" id="option{index}" >
+        <label for="ans{index}" id="option{index}" class="options" >
           <input 
             type="radio"
             name="ans"
@@ -39,3 +39,19 @@
     </div>
   {/if}
 {/each}
+</div>
+
+<style>
+  .main-body{
+    display: block;
+    margin: 0 250px 0 250px;
+  }
+
+  .show-ques{
+    margin-bottom: 30px;
+  }
+
+  .options{
+    margin-bottom: 10px;
+  }
+</style>

@@ -23,9 +23,26 @@
       $userAnsObj[i] = user_ans;
     }
   }
+  function attemptChangeHandler(){
+    document.getElementById('attempt_item').style.background ='aqua';
+    document.getElementById('unattempt_item').style.background ='silver';
+    document.getElementById('all_item').style.background ='silver';
+  }
+  function unAttemptChangeHandler(){
+    document.getElementById('attempt_item').style.background ='silver';
+    document.getElementById('unattempt_item').style.background ='aqua';
+    document.getElementById('all_item').style.background ='silver';
+  }
+  function AllChangeHandler(){
+    document.getElementById('attempt_item').style.background ='silver';
+    document.getElementById('unattempt_item').style.background ='silver';
+    document.getElementById('all_item').style.background ='aqua';
+  }
+
   export let quesList = $apiData;
   function onItemClicked(type) {
     if (type == 'attempted') {
+      attemptChangeHandler();
       quesList = $apiData.filter((item, index) => {
         return (
           $userAnsObj.hasOwnProperty(index) &&
@@ -33,17 +50,20 @@
         );
       });
     } else if (type == 'unattempted') {
+      unAttemptChangeHandler();
       quesList = $apiData.filter((item, index) => {
         return (
           !$userAnsObj.hasOwnProperty(index) ||
           ($userAnsObj.hasOwnProperty(index) &&
-            $userAnsObj[index].isCorrect == '')
-        );
-      });
-    } else if (type == 'all') {
+          $userAnsObj[index].isCorrect == '')
+          );
+        });
+      } else if (type == 'all') {
+        AllChangeHandler();
       quesList = $apiData;
     }
   }
+
   afterUpdate(() => {
     $unAttempted = $apiData.length - $attempted;
   });
@@ -52,16 +72,16 @@
 
 {#if show}
   <nav transition:fly={{ x: -550, opacity: 1 }}>
-    <div class="allItem" on:click={() => onItemClicked('all')}>
+    <div class="allItem" id="all_item" on:click={() => onItemClicked('all')}>
       All Item:{$apiData.length}
     </div>
-    <div class="attempted" on:click={() => onItemClicked('attempted')}>
+    <div class="attempt" id="attempt_item" on:click={() => onItemClicked('attempted')}>
       Attempted: {$attempted}
     </div>
-    <div class="unattempted" on:click={() => onItemClicked('unattempted')}>
+    <div class="attempt" id="unattempt_item" on:click={() => onItemClicked('unattempted')}>
       UnAttempted:{$unAttempted}
     </div>
-    <ul>
+    <ol>
       {#each quesList as dataItem, i (dataItem)}
         <li id="list{i}">
           <button id="ques-btn{i}" class="nav-btn" on:click={() => jumpQuest(i)}
@@ -69,7 +89,7 @@
           >
         </li>
       {/each}
-    </ul>
+    </ol>
   </nav>
 {/if}
 
@@ -90,24 +110,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-  .allItem {
+  .attempt {
     background: silver;
     border: 2px solid black;
     font-weight: bold;
     cursor: pointer;
     padding: 10px;
   }
-  .attempted {
-    background: rgb(115, 214, 115);
-    border: 1px solid black;
-    font-weight: bold;
-    cursor: pointer;
-    padding: 10px;
-  }
-  .unattempted {
-    background: rgb(245, 154, 154);
-    border: 1px solid black;
+
+  .allItem{
+    background: aqua;
+    border: 2px solid black;
     font-weight: bold;
     cursor: pointer;
     padding: 10px;
