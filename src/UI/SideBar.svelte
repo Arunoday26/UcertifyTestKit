@@ -92,6 +92,9 @@
       {#if $attempted ==0}
       <div class="no-attempt">No Ques is Attempted</div>
       {/if}
+      {#if $unAttempted ==0}
+      <div class="no-attempt">All Ques is Attempted</div>
+      {/if}
     </ol>
   </nav>
 {/if}
