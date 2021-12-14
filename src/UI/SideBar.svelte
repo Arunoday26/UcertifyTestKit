@@ -114,7 +114,7 @@
     white-space: nowrap;
     overflow: scroll;
   }
-  .nav-btn {
+  .nav-btn {  
     width: 200px;
     white-space: nowrap;
     overflow: hidden;

@@ -138,12 +138,12 @@
                 $userAnsObj[i].chosenAns == ans.answer}
               disabled
             />
-            {ans.answer}
+            {@html ans.answer}
           </label>
         {/each}
         <div class="explanation"><strong>Explanation:</strong></div>
         <div>
-          {JSON.parse(dataItem.content_text).explanation}
+          {@html JSON.parse(dataItem.content_text).explanation}
         </div>
       </div>
       <ReviewPage

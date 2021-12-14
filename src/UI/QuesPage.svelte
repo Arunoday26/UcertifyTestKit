@@ -33,7 +33,7 @@
             on:click={onOptionClicked}
             checked={$userAnsObj[$currentQues]?.chosenAns === ans.answer}
           />
-          {ans.answer}
+          {@html ans.answer}
         </label>
       {/each}
     </div>
