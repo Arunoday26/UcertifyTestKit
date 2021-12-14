@@ -89,11 +89,18 @@
           >
         </li>
       {/each}
+      {#if $attempted ==0}
+      <div class="no-attempt">No Ques is Attempted</div>
+      {/if}
     </ol>
   </nav>
 {/if}
 
 <style>
+  .no-attempt{
+    margin-right: 35px;
+    font-weight: bold;
+  }
   nav {
     position: fixed;
     top: 13.2%;
@@ -110,6 +117,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  
   .attempt {
     background: silver;
     border: 2px solid black;
