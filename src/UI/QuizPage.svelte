@@ -36,7 +36,7 @@
     isOpenModal = false;
   }
   let min = 20;
-  let sec = 60;
+  let sec = 59;
   let timer;
 
   onMount(() => {
@@ -44,7 +44,7 @@
       sec--;
       if (sec == 0) {
         min--;
-        sec = 60;
+        sec = 59;
         if (min < 0) {
           clearInterval(timer);
           min = 0;

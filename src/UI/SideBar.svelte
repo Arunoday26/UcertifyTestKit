@@ -23,23 +23,24 @@
       $userAnsObj[i] = user_ans;
     }
   }
-  function attemptChangeHandler(){
-    document.getElementById('attempt_item').style.background ='aqua';
-    document.getElementById('unattempt_item').style.background ='silver';
-    document.getElementById('all_item').style.background ='silver';
+  function attemptChangeHandler() {
+    document.getElementById('attempt_item').style.background = 'aqua';
+    document.getElementById('unattempt_item').style.background = 'silver';
+    document.getElementById('all_item').style.background = 'silver';
   }
-  function unAttemptChangeHandler(){
-    document.getElementById('attempt_item').style.background ='silver';
-    document.getElementById('unattempt_item').style.background ='aqua';
-    document.getElementById('all_item').style.background ='silver';
+  function unAttemptChangeHandler() {
+    document.getElementById('attempt_item').style.background = 'silver';
+    document.getElementById('unattempt_item').style.background = 'aqua';
+    document.getElementById('all_item').style.background = 'silver';
   }
-  function AllChangeHandler(){
-    document.getElementById('attempt_item').style.background ='silver';
-    document.getElementById('unattempt_item').style.background ='silver';
-    document.getElementById('all_item').style.background ='aqua';
+  function AllChangeHandler() {
+    document.getElementById('attempt_item').style.background = 'silver';
+    document.getElementById('unattempt_item').style.background = 'silver';
+    document.getElementById('all_item').style.background = 'aqua';
   }
 
   export let quesList = $apiData;
+  let shouldShowMessage;
   function onItemClicked(type) {
     if (type == 'attempted') {
       attemptChangeHandler();
@@ -49,18 +50,32 @@
           $userAnsObj[index].isCorrect != ''
         );
       });
+      if (quesList.length === 0) {
+        shouldShowMessage = true;
+      } else {
+        shouldShowMessage = false;
+      }
     } else if (type == 'unattempted') {
       unAttemptChangeHandler();
       quesList = $apiData.filter((item, index) => {
         return (
           !$userAnsObj.hasOwnProperty(index) ||
           ($userAnsObj.hasOwnProperty(index) &&
-          $userAnsObj[index].isCorrect == '')
-          );
-        });
-      } else if (type == 'all') {
+            $userAnsObj[index].isCorrect == '')
+        );
+      });
+      if (quesList.length <= 11) {
+        shouldShowMessage = false;
+      }
+      if (quesList.length === 0) {
+        shouldShowMessage = true;
+      }
+    } else if (type == 'all') {
+      if (quesList.length <= 11) {
         AllChangeHandler();
-      quesList = $apiData;
+        quesList = $apiData;
+        shouldShowMessage = false;
+      }
     }
   }
 
@@ -75,13 +90,21 @@
     <div class="allItem" id="all_item" on:click={() => onItemClicked('all')}>
       All Item:{$apiData.length}
     </div>
-    <div class="attempt" id="attempt_item" on:click={() => onItemClicked('attempted')}>
+    <div
+      class="attempt"
+      id="attempt_item"
+      on:click={() => onItemClicked('attempted')}
+    >
       Attempted: {$attempted}
     </div>
-    <div class="attempt" id="unattempt_item" on:click={() => onItemClicked('unattempted')}>
+    <div
+      class="attempt"
+      id="unattempt_item"
+      on:click={() => onItemClicked('unattempted')}
+    >
       UnAttempted:{$unAttempted}
     </div>
-    <ol>
+    <ol id="item">
       {#each quesList as dataItem, i (dataItem)}
         <li id="list{i}">
           <button id="ques-btn{i}" class="nav-btn" on:click={() => jumpQuest(i)}
@@ -89,18 +112,15 @@
           >
         </li>
       {/each}
-      {#if $attempted ==0}
-      <div class="no-attempt">No Ques is Attempted</div>
-      {/if}
-      {#if $unAttempted ==0}
-      <div class="no-attempt">All Ques is Attempted</div>
+      {#if shouldShowMessage}
+        <div class="no-attempt">There is No Questions</div>
       {/if}
     </ol>
   </nav>
 {/if}
 
 <style>
-  .no-attempt{
+  .no-attempt {
     margin-right: 35px;
     font-weight: bold;
   }
@@ -114,13 +134,13 @@
     white-space: nowrap;
     overflow: scroll;
   }
-  .nav-btn {  
+  .nav-btn {
     width: 200px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .attempt {
     background: silver;
     border: 2px solid black;
@@ -129,7 +149,7 @@
     padding: 10px;
   }
 
-  .allItem{
+  .allItem {
     background: aqua;
     border: 2px solid black;
     font-weight: bold;

@@ -54,7 +54,7 @@
 <footer>
   <div class="content">
     <div id="timer">
-      <p>{min}:{sec}</p>
+      <p>{min}:{sec.toLocaleString(undefined,{minimumIntegerDigits: 2})}</p>
     </div>
 
     <button
