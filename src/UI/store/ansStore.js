@@ -1,6 +1,3 @@
-import { writable } from "svelte/store";
+    import { writable } from "svelte/store";
 
-
-export let userAnsObj = writable({});
-
-
+    export let userAnsObj = writable({});
