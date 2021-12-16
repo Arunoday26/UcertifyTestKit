@@ -19,8 +19,7 @@
     <div class="main-body">
     {#each $apiData as dataItem, i (dataItem)}
     {#if $currentQues == i}
-    <p class="ques-show">Question:{i+1}</p>
-        <p class="show-ques">{JSON.parse(dataItem.content_text).question}</p>
+        <p class="show-ques">{i+1}{'.    '}{JSON.parse(dataItem.content_text).question}</p>
         <div id="question_section" >
         {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
             <label for="ans{index}" id="option{index}" class="options" >
@@ -55,7 +54,5 @@
     .options{
         margin-bottom: 10px;
     }
-    .ques-show{
-        font-weight: bold;
-    }
+
     </style>
