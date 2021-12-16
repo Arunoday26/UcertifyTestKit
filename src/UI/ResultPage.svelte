@@ -113,7 +113,7 @@
     {#each $apiData as dataItem, i (dataItem)}
         {#if quesExplMap[dataItem.content_id]}
         <div class="Explain-outer">
-            <p class="ques-show">Question:</p>
+            <p class="ques-show">Question:{i+1}</p>
             <div class="question">
             {JSON.parse(dataItem.content_text).question}
             </div>
