@@ -1,5 +1,5 @@
     <script>
-    import { currentQues, apiData, attempted, unAttempted } from './store/quesStore';
+    import { currentQues, apiData, attempted} from './store/quesStore';
     import { userAnsObj } from './store/ansStore';
     function onOptionClicked(event) {
         if ($userAnsObj[$currentQues].isCorrect == "") {

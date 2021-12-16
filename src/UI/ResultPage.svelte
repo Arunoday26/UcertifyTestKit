@@ -113,6 +113,7 @@
     {#each $apiData as dataItem, i (dataItem)}
         {#if quesExplMap[dataItem.content_id]}
         <div class="Explain-outer">
+            <p class="ques-show">Question:</p>
             <div class="question">
             {JSON.parse(dataItem.content_text).question}
             </div>
@@ -267,26 +268,27 @@
     }
     .correctLineContainer {
         color: #56e056;
-        margin-top: 10px;
+        margin-top: 2px;
     }
     .wrongLineContainer {
         color: red;
-        margin-top: 10px;
+        margin-top: 2px;
     }
 
     .LineContainer,
     .explain-ans {
-        margin-bottom: 10px;
-        margin-top: 10px;
+        margin-bottom: 2px;
+        margin-top: 2px;
     }
     .Explain-outer {
-            margin-top: 20px;
-        margin-bottom: 100px;
+        margin-top: 20px;
         padding: 5px;
         border: 2px solid red;
     }
     .question {
-        padding: 5px;
-        border-bottom: 2px solid red;
+        padding-bottom: 5px;
+    }
+    .ques-show{
+        font-weight: bold;
     }
     </style>
