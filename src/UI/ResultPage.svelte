@@ -165,7 +165,7 @@
         float: left;
     }
     header {
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         width: 100%;
         top: 0;
         left: 0;
@@ -196,7 +196,6 @@
         display: flex;
         flex-direction: column;
         text-align: center;
-        /* padding: 50px; */
     }
     .explanation {
         border-top: 2px solid red;
@@ -204,12 +203,12 @@
     }
 
     .totalResult {
-        color: red;
+        color: rgb(255, 0, 0);
         text-align: center;
     }
 
     .outerContainer {
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         margin-left: 100px;
         margin-right: 100px;
         /* padding: 5px; */
@@ -217,7 +216,7 @@
     .column-left {
         float: left;
         width: 10%;
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         margin: 2px;
         display: flex;
         flex-wrap: wrap;
@@ -227,7 +226,7 @@
     .column-right {
         float: right;
         width: 10%;
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         margin: 2px;
         display: flex;
         flex-wrap: wrap;
@@ -239,7 +238,7 @@
         /* font-weight: bold; */
         width: 77.7%;
         text-align: center;
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         margin: 2px;
     }
     .dataItem {
@@ -251,7 +250,7 @@
         justify-content: space-evenly;
     }
     .circleContainer {
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         border-radius: 50%;
         padding: 5px;
     }
@@ -261,7 +260,7 @@
         padding: 5px;
     }
     .wrongCircleContainer {
-        border: 3px solid red;
+        border: 3px solid rgb(255, 0, 0);
         border-radius: 50%;
         padding: 5px;
     }
@@ -270,7 +269,7 @@
         margin-top: 2px;
     }
     .wrongLineContainer {
-        color: red;
+        color: rgb(255, 0, 0);
         margin-top: 2px;
     }
 
@@ -282,7 +281,7 @@
     .Explain-outer {
         margin-top: 20px;
         padding: 5px;
-        border: 2px solid red;
+        border: 2px solid rgb(255, 0, 0);
     }
     .question {
         padding-bottom: 5px;

@@ -140,16 +140,16 @@
     }
 
     .attempt {
-        background: silver;
-        border: 2px solid black;
+        background: rgb(192, 192, 192);
+        border: 2px solid rgb(0, 0, 0);
         font-weight: bold;
         cursor: pointer;
         padding: 10px;
     }
 
     .allItem {
-        background: aqua;
-        border: 2px solid black;
+        background: rgb(0, 255 , 255);
+        border: 2px solid rgb(0, 0, 0);
         font-weight: bold;
         cursor: pointer;
         padding: 10px;

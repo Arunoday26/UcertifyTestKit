@@ -10,7 +10,7 @@
         float: left;
     }
     header {
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         width: 100%;
         top: 0;
         left: 0;

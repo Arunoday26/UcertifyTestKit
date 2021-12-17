@@ -77,7 +77,7 @@
         background-color: rgb(211, 121, 121);
     }
     .btn {
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         border-radius: 30px;
         width: 18%;
         font-weight: bold;

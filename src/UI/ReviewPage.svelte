@@ -53,7 +53,7 @@
 
     <style>
         footer {
-        border-top: 2px solid black;
+        border-top: 2px solid rgb(0, 0, 0);
         width: 100%;
         position: fixed;
         bottom: 0;
@@ -70,7 +70,7 @@
         }
 
         .dashBoard {
-        border: 2px solid black;
+        border: 2px solid rgb(0, 0, 0);
         border-radius: 5px;
         width: 18%;
         }

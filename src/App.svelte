@@ -29,8 +29,8 @@
         font: inherit;
         border: 1px solid #cf0056;
         background: #cf0056;
-        color: white;
-        padding: 0.5rem 1rem;
+        color: rgb(255, 255, 255);
+        padding: 8px 16px;
         border-radius: 5px;
         box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.26);
         cursor: pointer;
