@@ -93,7 +93,7 @@
 
             <div class="column-right">
             {#each JSON.parse(dataItem.content_text).answers as ans, index (ans)}
-                <p
+                <h6
                 class={ans.is_correct == '1'
                     ? 'correctCircleContainer'
                     : $userAnsObj.hasOwnProperty(i) &&
@@ -102,7 +102,7 @@
                     : 'circleContainer'}
                 >
                 {index + 1}
-                </p>
+            </h6>
             {/each}
             </div>
         </div>
@@ -112,6 +112,7 @@
     {#if review}
     {#each $apiData as dataItem, i (dataItem)}
         {#if quesExplMap[dataItem.content_id]}
+        <div class="outer"> 
         <div class="Explain-outer">
             <div class="question">
                 {i+1}{'.    '}{JSON.parse(dataItem.content_text).question}
@@ -146,6 +147,7 @@
             {@html JSON.parse(dataItem.content_text).explanation}
             </div>
         </div>
+        </div>
         <ReviewPage
             on:nextques={nextQuest}
             on:prevques={prevQuest}
@@ -163,6 +165,10 @@
         position: relative;
         height: 100%;
         float: left;
+    }
+    .outer{
+        overflow-y: hidden;
+        height: 500px;
     }
     header {
         border: 2px solid rgb(0, 0, 0);
@@ -216,7 +222,7 @@
     .column-left {
         float: left;
         width: 10%;
-        border: 2px solid rgb(0, 0, 0);
+        /* border: 2px solid rgb(0, 0, 0); */
         margin: 2px;
         display: flex;
         flex-wrap: wrap;
@@ -225,8 +231,8 @@
     }
     .column-right {
         float: right;
-        width: 10%;
-        border: 2px solid rgb(0, 0, 0);
+        width: 15%;
+        /* border: 2px solid rgb(0, 0, 0); */
         margin: 2px;
         display: flex;
         flex-wrap: wrap;
@@ -238,7 +244,8 @@
         /* font-weight: bold; */
         width: 77.7%;
         text-align: center;
-        border: 2px solid rgb(0, 0, 0);
+        border-left: 1.5px solid rgb(0, 0, 0);
+        border-right: 1.5px solid rgb(0, 0, 0);
         margin: 2px;
     }
     .dataItem {
@@ -248,21 +255,22 @@
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
+        border: 1px solid black;
     }
     .circleContainer {
         border: 2px solid rgb(0, 0, 0);
         border-radius: 50%;
-        padding: 5px;
+        padding: 12px;
     }
     .correctCircleContainer {
         border: 3px solid #56e056;
         border-radius: 50%;
-        padding: 5px;
+        padding: 12px;
     }
     .wrongCircleContainer {
         border: 3px solid rgb(255, 0, 0);
         border-radius: 50%;
-        padding: 5px;
+        padding: 12px;
     }
     .correctLineContainer {
         color: #56e056;
@@ -282,6 +290,7 @@
         margin-top: 20px;
         padding: 5px;
         border: 2px solid rgb(255, 0, 0);
+        
     }
     .question {
         padding-bottom: 5px;

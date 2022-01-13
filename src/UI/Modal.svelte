@@ -49,6 +49,8 @@
         transform: translate(-50%, -50%);
         background: #fff;
         filter: drop-shadow(0px 0px 500px black);
+        cursor: pointer;
+        overflow-y: scroll;
     }
     footer {
         border-top: 2px solid black;

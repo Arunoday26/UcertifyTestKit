@@ -45,6 +45,9 @@
     .main-body{
         display: block;
         margin: 0 250px 0 250px;
+        /* overflow-y: scroll; */
+        overflow-y: hidden;
+        height: 350px;
     }
 
     .show-ques{

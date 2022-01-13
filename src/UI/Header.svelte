@@ -1,6 +1,6 @@
     <header>
         <img class="logo" alt="uCertify Logo" src="Image/ucertifyLogo.png" />
-        <h1 class="test-name">uCertify Test Prep</h1>
+        <h2 class="test-name">uCertify Test Prep</h2>
     </header>
 
     <style>
@@ -22,7 +22,7 @@
         margin: 0;
         position: relative;
         color: rgb(197, 26, 26);
-        height: 50px;
+        height: 54px;
         display: flex;
         justify-content: center;
         align-items: center;
